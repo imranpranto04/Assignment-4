@@ -9,6 +9,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;500;700&display=swap"
         rel="stylesheet">
+
+        <!-- bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <!-- Stylesheet -->
     <link rel="stylesheet" href="style.css">
 </head>
@@ -32,7 +35,7 @@
             <h3>Booking Flights</h3>
             <div class="input-group">
                 <label for="">Flying From</label>
-                <input class="inp-style" type="text" name="" placeholder="Dhake, Bangladesh">
+                <input class="inp-style" type="text" name="" placeholder="Dhaka, Bangladesh">
             </div>
             <div class="input-group">
                 <label for="">Flying To</label>
@@ -51,29 +54,36 @@
             <div class="input-group f-class">
                 <div>
                     <label for="">First Class ($150)</label>
-                    <input class="inp-style inp-width" type="number" name="">
+                    <input id="class-input" class="inp-style inp-width" type="text" value="0">
                 </div>
-                <div class="plus-minus-btn">
-                    <p>+ -</p>
+                <!-- button plus minus -->
+                <div>
+                    <button onclick="bookingAirTicket('class',true)" class="btn btn-info">+</button>
+                    <button onclick="bookingAirTicket('class',false)" class="btn btn-info">-</button>
                 </div>
+                
             </div>
             
             <div class="input-group f-class">
                 <div>
                     <label for="">Economy ($100)</label>
-                    <input class="inp-style inp-width" type="number" name="">
+                    <input id="economy-input" class="inp-style inp-width" type="text" value="0">                   
                 </div>
-                <div class="plus-minus-btn">
-                    <p> <span>+</span> <span>-</span> </p>
+                <!-- button plus minus -->
+                <div>
+                    <button onclick="bookingAirTicket('economy',true)" class="btn btn-info">+</button>
+                    <button onclick="bookingAirTicket('economy',false)" class="btn btn-info">-</button>
                 </div>
             </div>
+
             <div class="calculations">
                 <div class="amount">
                     <div class="left">
                         <p>Subtotal</p>
                     </div>
                     <div class="right">
-                        <p>$500</p>
+                        <p id="sub-total">$00</p>
+                    
                     </div>
                 </div>
 
@@ -82,7 +92,8 @@
                         <p>Charge 10% VAT</p>
                     </div>
                     <div class="right">
-                        <p>$50</p>
+                        <!----- vatTotal----- -->
+                        <p id="vat-total">$00</p>
                     </div>
                 </div>
                 <hr>
@@ -91,7 +102,7 @@
                         <h4>Total</h4>
                     </div>
                     <div class="right">
-                        <p>$550</p>
+                        <p id="grand-total">$00</p>
                     </div>
                 </div>
             </div>
@@ -102,9 +113,93 @@
             <h1>discover <br> around the world</h1>
             <p>Lorem ipsum dolor sit amet consectetur adipisicingelit. Provident voluptatibus quam fuga laborumalias veniam libero autem quasi maxime ullam vero nama imi dolor, architecto ab facilis eaque deserunt nobise voluptatibus quam</p>
         </div>
-    </section>
+    </main>
 
-    <!--Thank You-->
+    <script>
+
+        function bookingAirTicket(category,isIncrease){
+                const categoryInput = document.getElementById(category + "-input");
+                const categoryCount = parseInt(categoryInput.value);
+                
+                let categoryNewCount = categoryCount;
+                if(isIncrease == true){
+                    categoryNewCount = categoryCount + 1;
+                }
+                else if(isIncrease == false && categoryCount > 0){
+                    categoryNewCount = categoryCount - 1;
+                }
+                categoryInput.value = categoryNewCount;
+
+                let categoryPrice = 0;
+                if(category == 'class'){
+                    categoryPrice = categoryNewCount * 150;
+                }
+                else if(category == 'economy'){
+                    categoryPrice = categoryNewCount * 100;
+                }
+                calculateCharge();
+                }
+
+        
+        function calculateCharge(){
+            const classInput = document.getElementById("class-input").value;
+            const classCount = parseInt(classInput);
+
+            const economyInput = document.getElementById("economy-input").value;
+            const economyCount = parseInt(economyInput);
+
+            const subTotal = classCount*150 + economyCount*100; 
+            document.getElementById("sub-total").innerText ='$' + subTotal;
+
+            const vatTotal = subTotal * 0.1;
+            document.getElementById("vat-total").innerText ='$' + vatTotal;
+
+            const grandTotal = subTotal + vatTotal;
+            document.getElementById("grand-total").innerText ='$' + grandTotal;
+        }
+
+        // function bookEconomyTicket(isIncrease){
+        //         const economyInput = document.getElementById("economy-input");
+        //         const ecoCount = parseInt(economyInput.value);
+                
+        //         let ecoNewCount = 0;
+        //         if(isIncrease == true){
+        //             ecoNewCount = ecoCount + 1;
+        //         }
+        //         else if(isIncrease == false && ecoCount > 0){
+        //             ecoNewCount = ecoCount - 1;
+        //         }
+        //         economyInput.value = ecoNewCount;
+
+        //         const ecoPrice = ecoNewCount * 100;
+        //         document.getElementById("eco-price").innerText = ecoPrice;
+        //         }
+
+
+        // economy plus increase
+        // document.getElementById("economy-increase").addEventListener("click",function(){
+        //     const economyInput = document.getElementById("economy-input");
+        //     const ecoCount = parseInt(economyInput.value);
+        //     const ecoNewCount = ecoCount + 1;
+        //     economyInput.value = ecoNewCount;
+
+        //     const ecoPrice = ecoNewCount * 100;
+        //     document.getElementById("eco-price").innerText = ecoPrice;
+        // })
+
+        // economy minus decrease
+        // document.getElementById("economy-decrease").addEventListener("click",function(){
+        //     const economyInput = document.getElementById("economy-input");
+        //     const ecoCount = parseInt(economyInput.value);
+        //     const ecoNewCount = ecoCount - 1;
+        //     economyInput.value = ecoNewCount;
+
+        //     const ecoPrice = ecoNewCount * 100;
+        //     document.getElementById("eco-price").innerText = ecoPrice;
+        // })
+
+       
+    </script>
 </body>
 
 </html>
